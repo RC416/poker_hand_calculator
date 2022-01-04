@@ -10,7 +10,7 @@ Key Steps
 5. return frequency at which each hand won
 
 definitions:
-  card = object with number (2-15) and suit (1-4)
+  card = object with number (2-14) and suit (1-4)
   deck = vector of the remaining (48) unique cards
   boards = all possible 5-card subets of deck
 =#
