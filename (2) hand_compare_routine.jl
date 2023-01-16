@@ -31,7 +31,7 @@ using InvertedIndices # not() array indexer
 
 # custom functions from other file. relies on above packages.
 cd("C:\\Users\\Ray\\OneDrive\\Projects\\Poker hand calculator")
-include("hand_rank_function.jl")
+include("(1) hand_rank_function.jl")
 using .hand_rank_function
 
 
@@ -101,7 +101,7 @@ h2_wins = fill(0, length(boards))
 
 
 # loop over all boards and tabulate which hand wins
-#for b in 1:length(boards)
+#for b in 1:lastindex(boards)
 Threads.@threads for b in 1:lastindex(boards) # Threads to run loop on all CPU cores.
 
     # get score of each hand for given board of 5 cards
@@ -130,3 +130,30 @@ tie_percent = 1.00 - h1_win_percent - h2_win_percent
 # version 3 (using parallel processing) 40 seconds, 48 card deck, with ace in starting hand
 # version 4 (parallel, better aces handling) 15 seconds, 48 card deck, with ace in starting hand
 # version 4 (parallel, better aces handling) 13 seconds, 48 card deck, no ace in starting hand
+
+
+
+# profiling/benchmarking
+function L(boards)
+    for b in 1:lastindex(boards) # Threads to run loop on all CPU cores.
+
+        # get score of each hand for given board of 5 cards
+        h1_score = hand_rank_main([hand_1; boards[b]])
+        h2_score = hand_rank_main([hand_2; boards[b]])
+    
+        # record which hand won
+        if h1_score > h2_score
+            h1_wins[b] = 1
+        end
+    
+        if h2_score > h1_score
+            h2_wins[b] = 1
+        end
+    end
+end
+
+using Profile
+@profview L(boards)
+
+using BenchmarkTools
+@btime L(boards)

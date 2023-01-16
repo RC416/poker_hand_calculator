@@ -89,7 +89,7 @@ function sequence_in_set(X, Y)
     seq_length = length(X)
 
     # empty array to store any indeces where X overlaps Y
-    sequence_match = fill(0, 1)
+    sequence_match = [0]
 
     # check "sliding window" of Y of length seq_length. (subsets that don't drop interior elements)
     # ex. Y=[1,2,3,4], length(X)=3, check: [1,2,3], [2,3,4].
